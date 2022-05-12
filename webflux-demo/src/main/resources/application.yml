@@ -1,0 +1,47 @@
+# service instance name
+spring:
+  application:
+    # 服务名
+    name: nacos-invoker
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册中心
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+    loadbalancer:
+      ribbon:
+        enabled: false
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/shirodb?serverTimezone=Asia/Shanghai&useUnicode=true&useSSL=false&characterEncoding=UTF-8
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+
+# seata 配置
+seata:
+  tx-service-group: my_test_tx_group # 一定用这个默认的
+  enabled: true
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 127.0.0.1:8848
+      group : SEATA_GROUP
+      namespace: ""
+      username: nacos
+      password: nacos
+  service:
+    vgroup-mapping:
+      my_test_tx_group: default    #这里要特别注意和nacos中配置的要保持一直
+
+server:
+  # 服务端口
+  port: 8082
+
+management:
+  # 端点检查（健康检查）
+  endpoints:
+    web:
+      exposure:
+        include: "*"
